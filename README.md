@@ -13,7 +13,7 @@
 
 ## 👥 Team Members
 - Ganesh Karthik SL (Major Role)
-- [Add the other 3 members here]
+
 
 ---
 
