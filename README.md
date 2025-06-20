@@ -14,9 +14,11 @@
 ## 👥 Team Members
 - Ganesh Karthik SL (Major Role)
 
-
 ---
-
+-Danush L Shetty
+-Deepak HD
+-Ekiilu Joshou
+-------
 ## 🚀 Features
 
 - ♻️ Waste submission form for providers  
