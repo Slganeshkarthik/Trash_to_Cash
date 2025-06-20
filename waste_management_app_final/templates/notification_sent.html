@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Sent</title>
+    <style>
+        :root {
+            --primary-color: #FFD700;
+            --secondary-color: #DAA520;
+            --accent-color: #B8860B;
+            --text-color: #FFD700;
+            --light-text: #FFF;
+            --container-bg: rgba(0, 0, 0, 0.7);
+            --card-bg: rgba(20, 20, 20, 0.9);
+            --border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url("{{ url_for('static', filename='marble_bg.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: var(--light-text);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .notification-box {
+            background: var(--container-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .notification-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .notification-box h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .notification-box p {
+            font-size: 16px;
+            margin: 12px 0;
+            color: var(--light-text);
+        }
+
+        .notification-box strong {
+            color: var(--primary-color);
+        }
+
+        .rating-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .rating-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--light-text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+        }
+
+        .go-home {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: #000;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .go-home:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        button[type="submit"] {
+            background: var(--primary-color);
+            color: #000;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .user-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .user-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-color);
+            color: #000;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+
+        .user-circle:hover {
+            transform: scale(1.05);
+            background: var(--secondary-color);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            min-width: 180px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .notification-box {
+                margin: 20px;
+                padding: 30px 20px;
+                max-width: calc(100% - 40px);
+            }
+
+            .notification-box h2 {
+                font-size: 1.8rem;
+                margin-bottom: 25px;
+            }
+
+            .notification-box p {
+                font-size: 0.95rem;
+                margin: 10px 0;
+            }
+
+            .rating-section {
+                margin-top: 25px;
+                padding-top: 15px;
+            }
+
+            .rating-section h3 {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            select, textarea {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .go-home {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+
+            button[type="submit"] {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+
+            .user-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .notification-box {
+                margin: 15px;
+                padding: 25px 15px;
+            }
+
+            .notification-box h2 {
+                font-size: 1.6rem;
+                margin-bottom: 20px;
+            }
+
+            .notification-box p {
+                font-size: 0.9rem;
+                margin: 8px 0;
+            }
+
+            .rating-section {
+                margin-top: 20px;
+                padding-top: 12px;
+            }
+
+            .rating-section h3 {
+                font-size: 1.2rem;
+                margin-bottom: 12px;
+            }
+
+            select, textarea {
+                padding: 8px;
+                font-size: 0.9rem;
+                margin: 6px 0;
+            }
+
+            .go-home {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+                margin-top: 15px;
+            }
+
+            button[type="submit"] {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+                margin-top: 12px;
+            }
+
+            .user-circle {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .dropdown-menu {
+                min-width: 150px;
+            }
+
+            .dropdown-menu a {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+
+            label {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        {% if session.get('user') or session.get('collector') %}
+        <div class="user-menu">
+            <div class="user-circle" onclick="toggleMenu()">
+                {% if session.get('user') %}
+                {{ session['user'][0]|upper }}
+                {% elif session.get('collector') %}
+                {{ session['collector'][0]|upper }}
+                {% endif %}
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="notification-box">
+        <h2>✅ Notification Sent!</h2>
+        <p><strong>Collector:</strong> {{ collector }}</p>
+        <p><strong>Name:</strong> {{ provider.name }}</p>
+        <p><strong>Address:</strong> {{ provider.address }}</p>
+        <p><strong>Phone:</strong> {{ provider.phone }}</p>
+        <p><strong>Waste Type:</strong> {{ provider.waste_type }}</p>
+        
+        <div class="rating-section">
+            <h3>Rate this Collector</h3>
+            <form action="{{ url_for('rate_collector') }}" method="POST">
+                <input type="hidden" name="collector_username" value="{{ collector }}">
+                <div class="rating-stars">
+                    <label>Rating:</label>
+                    <select name="rating" required>
+                        <option value="1">⭐ (1)</option>
+                        <option value="2">⭐⭐ (2)</option>
+                        <option value="3">⭐⭐⭐ (3)</option>
+                        <option value="4">⭐⭐⭐⭐ (4)</option>
+                        <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Comment (optional):</label>
+                    <textarea name="comment" rows="3"></textarea>
+                </div>
+                <button type="submit">Submit Rating</button>
+            </form>
+        </div>
+        
+        <a href="/" class="go-home">Go Home</a>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("dropdownMenu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        // Close dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.closest('.user-menu')) {
+                document.getElementById("dropdownMenu").style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

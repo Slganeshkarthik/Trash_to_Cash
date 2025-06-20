@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .table-container {
+            margin-bottom: 40px;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: #1a1a1a;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #333;
+            color: #ffffff;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #262626;
+        }
+
+        tr:hover {
+            background-color: #333333;
+        }
+
+        .go-home {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #db4427;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .go-home:hover {
+            background-color: #f62c03;
+        }
+
+        .empty-table {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .password-cell {
+            font-family: monospace;
+            color: #666;
+        }
+
+        .timestamp-cell {
+            white-space: nowrap;
+        }
+
+        .rating-cell {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Database Tables</h1>
+
+    {% for table_name, table_info in tables_data.items() %}
+    <div class="table-container">
+        <h2>{{ table_name }}</h2>
+        {% if table_info.data %}
+        <table>
+            <thead>
+                <tr>
+                    {% for column in table_info.columns %}
+                    <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table_info.data %}
+                <tr>
+                    {% for cell in row %}
+                    <td {% if 'password' in table_info.columns[loop.index0].lower() %}class="password-cell"
+                        {% elif 'created_at' in table_info.columns[loop.index0].lower() %}class="timestamp-cell"
+                        {% elif 'rating' == table_info.columns[loop.index0].lower() %}class="rating-cell"
+                        {% endif %}>
+                        {% if 'rating' == table_info.columns[loop.index0].lower() %}
+                            {{ '⭐' * cell if cell else '0' }}
+                        {% else %}
+                            {{ cell }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-table">No data available in this table</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <a href="{{ url_for('admin_dashboard') }}" class="go-home">Back to Admin Dashboard</a>
+
+    <script>
+        // Add any interactive features here if needed
+    </script>
+</body>
+</html> 

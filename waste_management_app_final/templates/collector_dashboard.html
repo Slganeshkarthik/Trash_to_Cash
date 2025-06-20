@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collector Dashboard - Trash to Cash</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #FFD700;
+            --secondary-color: #DAA520;
+            --accent-color: #B8860B;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #fff;
+            --black: #000;
+            --glass-bg: rgba(0, 0, 0, 0.6);
+            --glass-border: rgba(255, 215, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #000000;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 40px;
+            padding: 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .collector-info {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-icon {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .info-value {
+            color: var(--white);
+        }
+
+        .notifications {
+            margin-top: 30px;
+        }
+
+        .notification-card {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .notification-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .notification-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .notification-time {
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+
+        .notification-details {
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 8px;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: var(--primary-color);
+            min-width: 100px;
+        }
+
+        .complete-button {
+            background: var(--primary-color);
+            color: var(--black);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .complete-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .no-notifications {
+            text-align: center;
+            color: var(--white);
+            padding: 40px;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 80px 20px 20px;
+                padding: 30px 20px;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .logo {
+                height: 40px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+                margin-bottom: 25px;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .collector-info {
+                padding: 20px;
+                margin-bottom: 25px;
+            }
+
+            .notification-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .notification-card {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .notification-title {
+                font-size: 1.1rem;
+            }
+
+            .complete-button {
+                padding: 8px 16px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 70px 15px 15px;
+                padding: 20px 15px;
+            }
+
+            .header {
+                padding: 10px;
+            }
+
+            .logo {
+                height: 35px;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+                margin-bottom: 20px;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+                margin-bottom: 12px;
+            }
+
+            .info-grid {
+                gap: 12px;
+            }
+
+            .info-item {
+                font-size: 0.9rem;
+            }
+
+            .info-icon {
+                font-size: 1.1rem;
+            }
+
+            .collector-info {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .notification-card {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .notification-title {
+                font-size: 1rem;
+            }
+
+            .notification-time {
+                font-size: 0.85rem;
+            }
+
+            .detail-row {
+                gap: 8px;
+                font-size: 0.9rem;
+            }
+
+            .detail-label {
+                min-width: 80px;
+            }
+
+            .complete-button {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            .no-notifications {
+                padding: 30px 15px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="{{ url_for('static', filename='logomain1.png') }}" alt="Logo" class="logo">
+        <div class="user-menu">
+            <a href="{{ url_for('logout') }}" style="text-decoration: none;">
+                <button class="complete-button">Logout</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Collector Dashboard</h2>
+
+        <div class="collector-info">
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-icon">👤</span>
+                    <span class="info-label">Name:</span>
+                    <span class="info-value">{{ collector.name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🏷️</span>
+                    <span class="info-label">Username:</span>
+                    <span class="info-value">{{ collector.username }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📱</span>
+                    <span class="info-label">Contact:</span>
+                    <span class="info-value">{{ collector.contact }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">♻️</span>
+                    <span class="info-label">Waste Type:</span>
+                    <span class="info-value">{{ collector.waste_type|title }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="notifications">
+            <h3>Pickup Requests</h3>
+            {% if notifications %}
+                {% for notification in notifications %}
+                <div class="notification-card">
+                    <div class="notification-header">
+                        <div class="notification-title">New Pickup Request</div>
+                        <div class="notification-time">{{ notification.date }} at {{ notification.time }}</div>
+                    </div>
+                    <div class="notification-details">
+                        <div class="detail-row">
+                            <span class="info-icon">👤</span>
+                            <span class="detail-label">Provider:</span>
+                            <span>{{ notification.name }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="info-icon">📍</span>
+                            <span class="detail-label">Address:</span>
+                            <span>{{ notification.address }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="info-icon">📱</span>
+                            <span class="detail-label">Contact:</span>
+                            <span>{{ notification.phone }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="info-icon">♻️</span>
+                            <span class="detail-label">Waste Type:</span>
+                            <span>{{ notification.waste_type|title }}</span>
+                        </div>
+                    </div>
+                    <form method="POST" action="{{ url_for('complete_notification') }}">
+                        <input type="hidden" name="notification_id" value="{{ notification.id }}">
+                        <button type="submit" class="complete-button">Mark as Complete</button>
+                    </form>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-notifications">
+                    No pending pickup requests at the moment.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

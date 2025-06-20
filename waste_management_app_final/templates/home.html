@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash to Cash - Waste Management System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #FFD700;
+            --secondary-color: #DAA520;
+            --accent-color: #B8860B;
+            --text-color: #FFD700;
+            --light-text: #FFF;
+            --white: #fff;
+            --container-bg: rgba(0, 0, 0, 0.7);
+            --card-bg: rgba(20, 20, 20, 0.9);
+            --border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url("{{ url_for('static', filename='marble_bg.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 25px 20px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--container-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--border-color);
+            height: 80px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            max-width: 120px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .main {
+            padding-top: 120px;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 20px 40px;
+        }
+
+        .hero-section {
+            padding-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1.2;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            padding-top: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            line-height: 1.6;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 30, 30, 0.95);
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .feature-description {
+            color: var(--light-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .auth-container {
+            background: var(--container-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            max-width: 400px;
+            width: 100%;
+            margin-left: auto;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .auth-container:hover {
+            background: rgba(20, 20, 20, 0.85);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .auth-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .auth-button {
+            background: var(--primary-color);
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .auth-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .auth-button.secondary {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .auth-button.secondary:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--primary-color);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .user-circle:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-width: 180px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .images-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--container-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .image-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 30, 30, 0.95);
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.2);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .image-card h3 {
+            color: var(--primary-color);
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .image-card p {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .images-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main {
+                padding: 100px 15px 40px;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px;
+                height: 70px;
+            }
+
+            .logo {
+                max-width: 100px;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+                padding-top: 10px;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .auth-container {
+                padding: 25px 20px;
+                margin: 0 auto;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+
+            .images-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 15px;
+            }
+
+            .image-card img {
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px;
+                height: 60px;
+            }
+
+            .logo {
+                max-width: 80px;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .auth-button {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+
+            .feature-icon {
+                font-size: 2rem;
+            }
+
+            .feature-title {
+                font-size: 1.1rem;
+            }
+
+            .feature-description {
+                font-size: 0.9rem;
+            }
+        }
+
+        .support-section {
+            background: var(--container-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            margin-top: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .support-section:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .support-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .support-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .support-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--white);
+            font-size: 1.1rem;
+        }
+
+        .support-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .support-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .support-link:hover {
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .support-section {
+                padding: 25px 20px;
+                margin: 30px 20px;
+            }
+
+            .support-title {
+                font-size: 1.6rem;
+            }
+
+            .support-info {
+                gap: 30px;
+            }
+
+            .support-item {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .support-section {
+                padding: 20px 15px;
+                margin: 25px 15px;
+            }
+
+            .support-title {
+                font-size: 1.4rem;
+            }
+
+            .support-info {
+                gap: 20px;
+                flex-direction: column;
+            }
+
+            .support-item {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logomain1.png') }}" alt="Logo" class="logo">
+        </div>
+        {% if session.get('user') or session.get('collector') %}
+        <div class="user-menu">
+            <div class="user-circle" onclick="toggleMenu()">
+                {% if session.get('user') %}
+                {{ session['user'][0]|upper }}
+                {% elif session.get('collector') %}
+                {{ session['collector'][0]|upper }}
+                {% endif %}
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="main">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Turn Your Waste Into Value</h1>
+                <p class="hero-subtitle">Join our eco-friendly community and make a difference. We connect waste providers with certified collectors to create a sustainable future.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">♻️</div>
+                        <h3 class="feature-title">Easy Waste Management</h3>
+                        <p class="feature-description">Schedule pickups with just a few clicks and manage your waste efficiently.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3 class="feature-title">Earn From Waste</h3>
+                        <p class="feature-description">Convert your recyclable waste into cash with our network of collectors.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌍</div>
+                        <h3 class="feature-title">Eco-Friendly</h3>
+                        <p class="feature-description">Contribute to a cleaner environment by proper waste segregation and recycling.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⭐</div>
+                        <h3 class="feature-title">Trusted Collectors</h3>
+                        <p class="feature-description">Work with verified waste collectors rated by our community.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-container">
+                <h2 class="auth-title">Get Started Today</h2>
+                <div class="auth-links">
+                    {% if session.get('user') %}
+                    <a href="/provider" class="auth-button">Request Pickup</a>
+                    {% elif session.get('collector') %}
+                    <a href="/collector-dashboard" class="auth-button">Collector Dashboard</a>
+                    {% else %}
+                    <a href="/signup" class="auth-button">Create Account</a>
+                    <a href="/login" class="auth-button secondary">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="images-section">
+            <div class="image-card">
+                <img src="{{ url_for('static', filename='collection-1.png') }}" alt="Waste Collection">
+                <h3>Professional Collection</h3>
+                <p>Our certified collectors ensure proper handling and disposal of your waste materials.</p>
+            </div>
+            <div class="image-card">
+                <img src="{{ url_for('static', filename='recycling-1.png') }}" alt="Recycling Process">
+                <h3>Efficient Recycling</h3>
+                <p>State-of-the-art recycling processes to maximize resource recovery.</p>
+            </div>
+            <div class="image-card">
+                <img src="{{ url_for('static', filename='sorting-1.png') }}" alt="Waste Sorting">
+                <h3>Proper Sorting</h3>
+                <p>Systematic waste segregation for optimal recycling outcomes.</p>
+            </div>
+        </div>
+
+        <div class="support-section">
+            <h2 class="support-title">Customer Support</h2>
+            <div class="support-info">
+                <div class="support-item">
+                    <span class="support-icon">📧</span>
+                    <a href="mailto:support@trashtocash.com" class="support-link">support@trashtocash.com</a>
+                </div>
+                <div class="support-item">
+                    <span class="support-icon">📞</span>
+                    <a href="tel:+9100000000" class="support-link">+91 0000000000</a>
+                </div>
+                <div class="support-item">
+                    <span class="support-icon">⏰</span>
+                    <span>24/7 Support Available</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("dropdownMenu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        // Close dropdown if clicked outside
+        window.onclick = function (event) {
+            if (!event.target.closest('.user-menu')) {
+                document.getElementById("dropdownMenu").style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>

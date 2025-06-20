@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Collectors - Trash to Cash</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #FFD700;
+            --secondary-color: #DAA520;
+            --accent-color: #B8860B;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #fff;
+            --black: #000;
+            --glass-bg: rgba(0, 0, 0, 0.6);
+            --glass-border: rgba(255, 215, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #000000;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 40px;
+            padding: 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .collectors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .collector-card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .collector-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .collector-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .collector-info {
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .info-icon {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .rating-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stars {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .rating-text {
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+
+        .select-button {
+            background: var(--primary-color);
+            color: var(--black);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .select-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .rating-form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .rating-stars {
+            display: inline-flex;
+            flex-direction: row;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .star-radio {
+            display: none;
+        }
+
+        .star-label {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: rgba(255, 215, 0, 0.3);
+            transition: color 0.2s ease;
+        }
+
+        /* Reset all stars to default color on hover */
+        .rating-stars:hover .star-label {
+            color: rgba(255, 215, 0, 0.3);
+        }
+
+        /* Color stars on hover */
+        .star-label:hover,
+        .star-label:hover ~ .star-label {
+            color: var(--secondary-color) !important;
+        }
+
+        /* Color stars when checked */
+        .star-radio:checked + .star-label,
+        .star-radio:checked + .star-label ~ .star-label {
+            color: var(--primary-color);
+        }
+
+        /* Star ordering */
+        .rating-stars label:nth-of-type(1) { order: 5; }
+        .rating-stars label:nth-of-type(2) { order: 4; }
+        .rating-stars label:nth-of-type(3) { order: 3; }
+        .rating-stars label:nth-of-type(4) { order: 2; }
+        .rating-stars label:nth-of-type(5) { order: 1; }
+
+        .comment-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--white);
+            resize: vertical;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+        }
+
+        .submit-rating {
+            background: var(--primary-color);
+            color: var(--black);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .submit-rating:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                margin: 90px auto 30px;
+                padding: 35px 25px;
+            }
+
+            .collectors-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 25px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 80px 20px 20px;
+                padding: 30px 20px;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .logo {
+                height: 40px;
+            }
+
+            .collectors-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+                margin-bottom: 25px;
+            }
+
+            .collector-card {
+                padding: 20px;
+            }
+
+            .collector-name {
+                font-size: 1.3rem;
+                margin-bottom: 12px;
+            }
+
+            .info-item {
+                margin-bottom: 8px;
+            }
+
+            .info-icon {
+                font-size: 1.1rem;
+            }
+
+            .rating-stars {
+                gap: 8px;
+            }
+
+            .star-label {
+                font-size: 1.3rem;
+            }
+
+            .select-button {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 70px 15px 15px;
+                padding: 25px 15px;
+            }
+
+            .header {
+                padding: 10px;
+            }
+
+            .logo {
+                height: 35px;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+            }
+
+            .collector-card {
+                padding: 15px;
+            }
+
+            .collector-name {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+
+            .info-item {
+                font-size: 0.9rem;
+                margin-bottom: 6px;
+            }
+
+            .info-icon {
+                font-size: 1rem;
+            }
+
+            .rating-container {
+                margin-bottom: 15px;
+            }
+
+            .stars {
+                font-size: 1.1rem;
+            }
+
+            .rating-text {
+                font-size: 0.85rem;
+            }
+
+            .select-button {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+
+            .rating-form {
+                margin-top: 15px;
+                padding-top: 15px;
+            }
+
+            .star-label {
+                font-size: 1.2rem;
+            }
+
+            .comment-input {
+                padding: 10px;
+                font-size: 0.9rem;
+                margin-bottom: 12px;
+            }
+
+            .submit-rating {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="{{ url_for('static', filename='logomain1.png') }}" alt="Logo" class="logo">
+    </div>
+
+    <div class="container">
+        <h2>Available {{ waste_type|title }} Waste Collectors</h2>
+        <div class="collectors-grid">
+            {% for collector in collectors %}
+            <div class="collector-card">
+                <div class="collector-name">{{ collector.name }}</div>
+                <div class="collector-info">
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>{{ collector.address }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📱</span>
+                        <span>{{ collector.contact }}</span>
+                    </div>
+                </div>
+                <div class="rating-container">
+                    <div class="stars">
+                        {% set rating = collector.rating|float %}
+                        {% for _ in range(rating|int) %}⭐{% endfor %}
+                        {% if rating % 1 >= 0.5 %}⭐{% endif %}
+                    </div>
+                    <span class="rating-text">{{ "%.1f"|format(rating) }} ({{ collector.total_ratings }} reviews)</span>
+                </div>
+                <form method="POST" style="margin-bottom: 20px;">
+                    <input type="hidden" name="selected_collector" value="{{ collector.username }}">
+                    <button type="submit" class="select-button">Select Collector</button>
+                </form>
+                <form class="rating-form" method="POST" action="{{ url_for('rate_collector') }}">
+                    <input type="hidden" name="collector_username" value="{{ collector.username }}">
+                    <div class="rating-stars">
+                        <input type="radio" id="star5_{{ collector.username }}" name="rating" value="5" class="star-radio">
+                        <label for="star5_{{ collector.username }}" class="star-label">⭐</label>
+                        <input type="radio" id="star4_{{ collector.username }}" name="rating" value="4" class="star-radio">
+                        <label for="star4_{{ collector.username }}" class="star-label">⭐</label>
+                        <input type="radio" id="star3_{{ collector.username }}" name="rating" value="3" class="star-radio">
+                        <label for="star3_{{ collector.username }}" class="star-label">⭐</label>
+                        <input type="radio" id="star2_{{ collector.username }}" name="rating" value="2" class="star-radio">
+                        <label for="star2_{{ collector.username }}" class="star-label">⭐</label>
+                        <input type="radio" id="star1_{{ collector.username }}" name="rating" value="1" class="star-radio">
+                        <label for="star1_{{ collector.username }}" class="star-label">⭐</label>
+                    </div>
+                    <textarea name="comment" class="comment-input" placeholder="Leave a comment (optional)"></textarea>
+                    <button type="submit" class="submit-rating">Submit Rating</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Dashboard - Trash to Cash</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #FFD700;
+            --secondary-color: #DAA520;
+            --accent-color: #B8860B;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #fff;
+            --black: #000;
+            --glass-bg: rgba(0, 0, 0, 0.6);
+            --glass-border: rgba(255, 215, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #000000;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 100px auto 40px;
+            padding: 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            color: var(--white);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+        }
+
+        button {
+            background: var(--primary-color);
+            color: var(--black);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-color);
+            color: var(--black);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 2px solid var(--glass-border);
+        }
+
+        .user-circle:hover {
+            transform: scale(1.05);
+            background: var(--secondary-color);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            min-width: 180px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 80px 20px 20px;
+                padding: 30px 20px;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .logo {
+                height: 40px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+                margin-bottom: 25px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            input, select {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            button {
+                padding: 10px 20px;
+            }
+
+            .user-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 70px 15px 15px;
+                padding: 25px 15px;
+            }
+
+            .header {
+                padding: 10px;
+            }
+
+            .logo {
+                height: 35px;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+                margin-bottom: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            label {
+                font-size: 0.9rem;
+                margin-bottom: 6px;
+            }
+
+            input, select {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+
+            button {
+                padding: 10px 15px;
+                font-size: 0.95rem;
+                margin-top: 15px;
+            }
+
+            .user-circle {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .dropdown-menu {
+                min-width: 150px;
+            }
+
+            .dropdown-menu a {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="{{ url_for('static', filename='logomain1.png') }}" alt="Logo" class="logo">
+        <div class="user-menu">
+            <div class="user-circle" onclick="toggleMenu()">
+                {{ session['user'][0]|upper }}
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Request Waste Collection</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" value="{{ name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" value="{{ address }}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" value="{{ phone }}" required>
+            </div>
+            <div class="form-group">
+                <label for="waste_type">Waste Type</label>
+                <select id="waste_type" name="waste_type" required>
+                    <option value="plastic" {% if waste_type == 'plastic' %}selected{% endif %}>Plastic</option>
+                    <option value="paper" {% if waste_type == 'paper' %}selected{% endif %}>Paper</option>
+                    <option value="metal" {% if waste_type == 'metal' %}selected{% endif %}>Metal</option>
+                    <option value="glass" {% if waste_type == 'glass' %}selected{% endif %}>Glass</option>
+                    <option value="organic" {% if waste_type == 'organic' %}selected{% endif %}>Organic</option>
+                </select>
+            </div>
+            <button type="submit">Find Collectors</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("dropdownMenu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.user-menu')) {
+                document.getElementById("dropdownMenu").style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

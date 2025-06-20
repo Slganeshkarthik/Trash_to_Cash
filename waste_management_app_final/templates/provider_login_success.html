@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Success</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #000000;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+        }
+
+        .message-box {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .message-box h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        .message-box a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 24px;
+            background-color: #FFD700;
+            color: #000000;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .message-box a:hover {
+            background-color: #DAA520;
+        }
+
+        .user-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .user-circle {
+            width: 40px;
+            height: 40px;
+            background-color: #FFD700;
+            color: #000000;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid #FFD700;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #FFD700;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+            border: 1px solid #FFD700;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        {% if session.get('user') or session.get('collector') %}
+        <div class="user-menu">
+            <div class="user-circle" onclick="toggleMenu()">
+                {% if session.get('user') %}
+                {{ session['user'][0]|upper }}
+                {% elif session.get('collector') %}
+                {{ session['collector'][0]|upper }}
+                {% endif %}
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+        <div class="message-box">
+            <h2>Provider Login Successful!</h2>
+            <a href="/provider">Request Pickup</a>
+        </div>
+</body>
+
+</html>
