@@ -5,7 +5,7 @@
 ---
 
 ## 🌐 Live Demo
-🔗 [Web App Link](https://ganesh2005.pythonanywhere.com/)
+🔗 [Website Link](https://ganesh2005.pythonanywhere.com/)
 
 📱 [Download Android App](https://drive.google.com/file/d/1y5_zMxN37M00doJvR43KdvbA1dPUpOYu/view?usp=drivesdk)
 
